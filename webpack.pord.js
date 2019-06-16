@@ -13,9 +13,6 @@ module.exports = {
     libraryTarget: 'umd'
   },
   mode: 'production',
-  externals: {
-    '@editorjs/editorjs': 'EditorJS',
-  },
   module: {
     rules: [
       {
