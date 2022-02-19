@@ -9,7 +9,8 @@
   />
 </template>
 
-<script>
+<script setup>
+  import { readonly, ref } from 'vue'
   import Header from '@editorjs/header'
   import List from '@editorjs/list'
   import ImageTool from '@editorjs/image'
@@ -26,79 +27,71 @@
   import paragraph from '@editorjs/paragraph'
   import checklist from '@editorjs/checklist'
 
-  export default {
-    name: 'app',
-    data() {
-      return {
-        initData: {},
-        saveData: {},
-        tools: {
-          header: {
-            class: Header,
-            config: {
-              placeholder: 'Enter a header'
-            }
-          },
-          list: {
-            class: List,
-          },
-          code: {
-            class: code,
-          },
-          inlineCode: {
-            class: inlineCode,
-          },
-          embed: {
-            class: embed,
-          },
-          link: {
-            class: link,
-          },
-          marker: {
-            class: marker,
-          },
-          table: {
-            class: table,
-          },
-          raw: {
-            class: raw,
-          },
-          delimiter: {
-            class: delimiter,
-          },
-          quote: {
-            class: quote,
-          },
-          image: {
-            class: ImageTool,
-          },
-          warning: {
-            class: warning,
-          },
-          paragraph: {
-            class: paragraph,
-          },
-          checklist: {
-            class: checklist,
-          },
-        }
+  const initData = readonly(JSON.parse('{"time":1558356864490,"blocks":[{"type":"paragraph","data":{"text":"First text"}},{"type":"paragraph","data":{"text":"Second text"}}],"version":"2.13"}'))
+
+  const tools = readonly({
+    header: {
+      class: Header,
+      config: {
+        placeholder: 'Enter a header'
       }
     },
-    mounted() {
-      this.initData = JSON.parse('{"time":1558356864490,"blocks":[{"type":"paragraph","data":{"text":"First text"}},{"type":"paragraph","data":{"text":"Second text"}}],"version":"2.13"}')
+    list: {
+      class: List,
     },
-    methods: {
-      onReady() {
-        console.log('editor are ready')
-      },
-      onChange(response) {
-        this.saveData = response
-      },
-      onSave(response) {
-        this.saveData = response;
-      }
-    }
+    code: {
+      class: code,
+    },
+    inlineCode: {
+      class: inlineCode,
+    },
+    embed: {
+      class: embed,
+    },
+    link: {
+      class: link,
+    },
+    marker: {
+      class: marker,
+    },
+    table: {
+      class: table,
+    },
+    raw: {
+      class: raw,
+    },
+    delimiter: {
+      class: delimiter,
+    },
+    quote: {
+      class: quote,
+    },
+    image: {
+      class: ImageTool,
+    },
+    warning: {
+      class: warning,
+    },
+    paragraph: {
+      class: paragraph,
+    },
+    checklist: {
+      class: checklist,
+    },
+  })
+
+  const saveData = ref({})
+
+  const onReady = () => {
+    console.log('editor are ready')
   }
+  const onChange = (response) => {
+    saveData.value = response
+  }
+  const onSave = (response) => {
+    saveData.value = response
+  }
+
 </script>
 
 <style scoped>

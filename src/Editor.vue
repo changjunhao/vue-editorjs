@@ -4,85 +4,79 @@
   </div>
 </template>
 
-<script>
+<script setup>
+  import { onMounted, onBeforeUnmount, ref } from 'vue'
   import EditorJS from '@editorjs/editorjs'
 
-  export default {
-    name: 'Editor',
-    props: {
-      holderId: {
-        type: String,
-        default: () => 'codex-editor',
-        required: false
-      },
-      autofocus: {
-        type: Boolean,
-        default: () => true,
-        required: false
-      },
-      placeholder: {
-        type: String,
-        default: () => 'Let`s write an awesome story!',
-        required: false
-      },
-      data: {
-        type: Object,
-        default: () => {},
-        required: false
-      },
-      tools: {
-        type: Object,
-        default: () => {},
-        required: false
-      }
+  const props = defineProps({
+    holderId: {
+      type: String,
+      default: () => 'codex-editor',
+      required: false
     },
-    data() {
-      return {
-        editor: null
-      }
+    autofocus: {
+      type: Boolean,
+      default: () => true,
+      required: false
     },
-    mounted() {
-      this.initEditor()
+    placeholder: {
+      type: String,
+      default: () => 'Let`s write an awesome story!',
+      required: false
     },
-    beforeDestroy() {
-      if (this.editor) {
-        this.editor.destroy();
-      }
+    data: {
+      type: Object,
+      default: () => {},
+      required: false
     },
-    watch: {
-      data: function () {
-        this.initEditor()
-      }
-    },
-    methods: {
-      initEditor() {
-        if (this.editor) {
-          this.editor.isReady
-            .then(() => {
-              this.editor.render(this.data)
-            }).catch(e => console.log(e));
-        } else {
-          this.editor = new EditorJS({
-            holder: this.holderId,
-            autofocus: this.autofocus,
-            placeholder: this.placeholder,
-            onReady: () => {
-              this.$emit('ready')
-            },
-            onChange: async () => {
-              const response = await this.editor.save()
-              this.$emit('change', response)
-            },
-            data: this.data,
-            tools: this.tools
-          })
-        }
-      },
-      async save () {
-        const response = await this.editor.save()
-        this.$emit('save', response)
-      },
+    tools: {
+      type: Object,
+      default: () => {},
+      required: false
     }
+  })
+
+  const emit = defineEmits(['ready', 'change', 'save'])
+
+  const editor = ref(null)
+
+  const initEditor = () => {
+    if (editor.value) {
+      editor.value.isReady
+          .then(() => {
+            editor.value.render(props.data)
+          }).catch(e => console.log(e));
+    } else {
+      editor.value = new EditorJS({
+        holder: props.holderId,
+        autofocus: props.autofocus,
+        placeholder: props.placeholder,
+        onReady: () => {
+          emit('ready')
+        },
+        onChange: async () => {
+          const response = await editor.value.save()
+          emit('change', response)
+        },
+        data: props.data,
+        tools: props.tools
+      })
+    }
+  }
+
+  onMounted(() => {
+    initEditor()
+  })
+
+  onBeforeUnmount(() => {
+    if (editor.value) {
+      editor.value.destroy();
+    }
+  })
+
+  const save = async () => {
+    const response = await editor.value.save()
+    emit('save', response)
   }
 </script>
 

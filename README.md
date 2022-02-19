@@ -4,6 +4,8 @@ vue-editorjs is editorjs wrapper component.
 
 Please see this first. https://editorjs.io/
 
+仅支持 Vue3，Vue2 请查看分支 vue2
+
 ## Installation
 
 ```bash

@@ -7,24 +7,28 @@
 
 import EditorComponent from './Editor.vue';
 
+// EditorComponent.install = (app) => {
+//   app.component('VueEditorjs', EditorComponent)
+// }
+
 const EditorPlugin = {
-  install(Vue) {
+  install(app) {
     if (this.installed) return;
     this.installed = true;
-    Vue.component('VueEditorjs', EditorComponent);
+    app.component('VueEditorjs', EditorComponent);
   }
 }
 
-export const Editor = EditorComponent;
-
-let GlobalVue = null;
-if (typeof window !== 'undefined') {
-  GlobalVue = window.Vue;
-} else if (typeof global !== 'undefined') {
-  GlobalVue = global.Vue;
-}
-if (GlobalVue) {
-  GlobalVue.use(EditorPlugin);
-}
+// export const Editor = EditorComponent;
+//
+// let GlobalVue = null;
+// if (typeof window !== 'undefined') {
+//   GlobalVue = window.Vue;
+// } else if (typeof global !== 'undefined') {
+//   GlobalVue = global.Vue;
+// }
+// if (GlobalVue) {
+//   GlobalVue.use(EditorPlugin);
+// }
 
 export default EditorPlugin;
