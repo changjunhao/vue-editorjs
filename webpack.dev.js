@@ -45,8 +45,9 @@ module.exports = {
     })
   ],
   devServer: {
-    contentBase: path.join(__dirname, 'demo'),
-    hot: true,
+    static: {
+      directory: path.join(__dirname, 'demo')
+    },
   },
   devtool: 'source-map'
 }

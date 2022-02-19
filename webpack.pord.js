@@ -1,10 +1,12 @@
 const path = require('path')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = {
   entry: {
-    'vue-editorjs': './src/index.js'
+    'vue-editorjs': './src/index.js',
+    'vue-editorjs.min': './src/index.js'
   },
   output: {
     path: path.join(__dirname, 'dist'),
@@ -30,4 +32,12 @@ module.exports = {
     new CleanWebpackPlugin(),
     new VueLoaderPlugin(),
   ],
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        include: /min/
+      })
+    ]
+  }
 }
