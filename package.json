@@ -3,9 +3,16 @@
   "version": "0.3.0",
   "description": "Editor js wrapping component",
   "keywords": [
+    "vue editor",
+    "vue rich text editor",
+    "rich text editor vue",
+    "WYSIWYG editor",
+    "vue WYSIWYG editor",
     "editor",
     "editorjs",
     "vue.js",
+    "vue editor componenet",
+    "vue WYSIWYG editor component",
     "vue-editorjs"
   ],
   "repository": {
@@ -43,11 +50,13 @@
   "devDependencies": {
     "@babel/core": "^7.17.5",
     "@babel/preset-env": "^7.12.11",
+    "@babel/preset-typescript": "^7.16.7",
     "@vue/compiler-sfc": "3.2.31",
     "babel-loader": "^8.2.2",
     "clean-webpack-plugin": "^4.0.0",
     "html-webpack-plugin": "^5.5.0",
     "terser-webpack-plugin": "^5.3.1",
+    "typescript": "^4.5.5",
     "vue": "^3.2.31",
     "vue-loader": "^17.0.0",
     "webpack": "^5.69.1",

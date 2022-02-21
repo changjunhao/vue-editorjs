@@ -5,8 +5,8 @@ const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = {
   entry: {
-    'vue-editorjs': './src/index.js',
-    'vue-editorjs.min': './src/index.js'
+    'vue-editorjs': './src/index.ts',
+    'vue-editorjs.min': './src/index.ts'
   },
   output: {
     path: path.join(__dirname, 'dist'),
@@ -18,7 +18,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(t|j)s$/,
         exclude: /node_modules/,
         use: 'babel-loader'
       },
@@ -27,6 +27,12 @@ module.exports = {
         loader: 'vue-loader'
       },
     ],
+  },
+  resolve: {
+    extensions: [".ts", ".tsx", ".js"]
+  },
+  externals: {
+    vue: 'Vue',
   },
   plugins: [
     new CleanWebpackPlugin(),

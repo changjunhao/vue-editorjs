@@ -5,7 +5,7 @@ const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = {
   entry: {
-    'app': './demo/main.js'
+    'app': './demo/main.ts'
   },
   output: {
     path: path.join(__dirname, 'dist'),
@@ -17,7 +17,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(t|j)s$/,
         exclude: /node_modules/,
         use: 'babel-loader'
       },
@@ -26,6 +26,9 @@ module.exports = {
         loader: 'vue-loader'
       },
     ],
+  },
+  resolve: {
+    extensions: [".ts", ".tsx", ".js"]
   },
   plugins: [
     new HotModuleReplacementPlugin(),
