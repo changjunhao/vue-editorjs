@@ -9,7 +9,7 @@
   import EditorJS, { OutputData } from '@editorjs/editorjs'
 
   export default defineComponent({
-    name: 'VueEditorJS',
+    name: 'vue-editorjs',
     props: {
       holderId: {
         type: String,

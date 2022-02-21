@@ -10,6 +10,7 @@
 </template>
 
 <script lang="ts">
+  // import { Editor } from '../dist/vue-editorjs.min.js'
   import { defineComponent, readonly, ref } from 'vue'
   import Header from '@editorjs/header'
   import List from '@editorjs/list'
@@ -28,6 +29,9 @@
   import checklist from '@editorjs/checklist'
 
   export default defineComponent({
+    // components: {
+    //   [Editor.name]: Editor
+    // },
     setup() {
       const initData = readonly(JSON.parse('{"time":1558356864490,"blocks":[{"type":"paragraph","data":{"text":"First text"}},{"type":"paragraph","data":{"text":"Second text"}}],"version":"2.13"}'))
 

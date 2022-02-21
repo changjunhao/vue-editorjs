@@ -1,6 +1,6 @@
 {
   "name": "@junhao/vue-editorjs",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Editor js wrapping component",
   "keywords": [
     "vue editor",
@@ -21,9 +21,9 @@
   },
   "author": "Junhao Chang<ward_1992@msn.cn>",
   "license": "MIT",
-  "main": "dist/vue-editorjs.js",
+  "main": "dist/vue-editorjs.min.js",
   "scripts": {
-    "build": "webpack --config webpack.pord.js",
+    "build": "webpack --config webpack.pord.js && tsc --emitDeclarationOnly",
     "dev": "webpack-dev-server --config webpack.dev.js --open",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

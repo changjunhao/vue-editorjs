@@ -5,16 +5,12 @@
  * @version 1.0.0
  */
 import { App } from 'vue'
-import Editor from './Editor.vue'
+import EditorComponent from './Editor.vue'
 
-// Editor.install = (app: App) => {
-//   app.component('VueEditorjs', Editor)
-// }
-//
-// export const VueEditorjs = Editor
+export const Editor = EditorComponent
 export default {
-  Editor,
+  Editor: EditorComponent,
   install: (app: App) => {
-    app.component('VueEditorjs', Editor)
+    app.component(EditorComponent.name, EditorComponent)
   }
 }

@@ -124,12 +124,13 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
+  "Editor": () => (/* binding */ src_Editor),
   "default": () => (/* binding */ src)
 });
 
 // EXTERNAL MODULE: external "Vue"
 var external_Vue_ = __webpack_require__(740);
-;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[5].use[0]!./src/Editor.vue?vue&type=template&id=27d65a4b&ts=true
+;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[5].use[0]!./src/Editor.vue?vue&type=template&id=44c7115a&ts=true
 
 var _hoisted_1 = {
   id: "vue-editorjs"
@@ -142,7 +143,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , _hoisted_2)]);
 }
-;// CONCATENATED MODULE: ./src/Editor.vue?vue&type=template&id=27d65a4b&ts=true
+;// CONCATENATED MODULE: ./src/Editor.vue?vue&type=template&id=44c7115a&ts=true
 
 // EXTERNAL MODULE: ./node_modules/@editorjs/editorjs/dist/editor.js
 var dist_editor = __webpack_require__(582);
@@ -155,7 +156,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 /* harmony default export */ const Editorvue_type_script_lang_ts = ((0,external_Vue_.defineComponent)({
-  name: 'VueEditorJS',
+  name: 'vue-editorjs',
   props: {
     holderId: {
       type: String,
@@ -304,16 +305,12 @@ const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(Editorvue_type_
  *
  * @version 1.0.0
  */
- // Editor.install = (app: App) => {
-//   app.component('VueEditorjs', Editor)
-// }
-//
-// export const VueEditorjs = Editor
 
+var src_Editor = Editor;
 /* harmony default export */ const src = ({
   Editor: Editor,
   install: function install(app) {
-    app.component('VueEditorjs', Editor);
+    app.component(Editor.name, Editor);
   }
 });
 })();

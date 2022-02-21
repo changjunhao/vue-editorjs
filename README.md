@@ -4,7 +4,7 @@ vue-editorjs is editorjs wrapper component.
 
 Please see this first. https://editorjs.io/
 
-仅支持 Vue3，Vue2 请查看分支 vue2
+Only supports Vue3, Vue2 please check the branch vue2
 
 ## Installation
 
@@ -20,9 +20,11 @@ yarn add @junhao/vue-editorjs
 ```js
 // In main.js
 // ...
+import { createApp } from 'vue'
+import App from './app.vue'
 import Editor from '@junhao/vue-editorjs'
 
-Vue.use(Editor)
+createApp(App).use(Editor).mount('#app')
 // ...
 ```
 
@@ -49,3 +51,5 @@ export default {
     @change="onChange"
   />
 ```      
+
+Please see demo for specific usage
