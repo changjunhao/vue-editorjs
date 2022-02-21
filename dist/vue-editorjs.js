@@ -130,20 +130,22 @@ __webpack_require__.d(__webpack_exports__, {
 
 // EXTERNAL MODULE: external "Vue"
 var external_Vue_ = __webpack_require__(740);
-;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[5].use[0]!./src/Editor.vue?vue&type=template&id=393bf444&ts=true
+;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[5].use[0]!./src/Editor.vue?vue&type=template&id=8db7fa02&ts=true
 
 var _hoisted_1 = {
   id: "vue-editorjs"
 };
 var _hoisted_2 = ["id"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
+  var _ctx$config;
+
   return (0,external_Vue_.openBlock)(), (0,external_Vue_.createElementBlock)("div", _hoisted_1, [(0,external_Vue_.createElementVNode)("div", {
-    id: _ctx.config.holderId || _ctx.holderId
+    id: ((_ctx$config = _ctx.config) === null || _ctx$config === void 0 ? void 0 : _ctx$config.holder) || _ctx.holder
   }, null, 8
   /* PROPS */
   , _hoisted_2)]);
 }
-;// CONCATENATED MODULE: ./src/Editor.vue?vue&type=template&id=393bf444&ts=true
+;// CONCATENATED MODULE: ./src/Editor.vue?vue&type=template&id=8db7fa02&ts=true
 
 // EXTERNAL MODULE: ./node_modules/@editorjs/editorjs/dist/editor.js
 var dist_editor = __webpack_require__(582);
@@ -171,14 +173,13 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
   name: 'vue-editorjs',
   props: {
     config: Object,
-    holderId: {
+    holder: {
       type: String,
       "default": function _default() {
         return 'codex-editor';
       },
       required: false
     },
-    holder: String,
     autofocus: {
       type: Boolean,
       "default": function _default() {
@@ -237,7 +238,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 
         var configuration = config || otherConfig;
         editor.value = new (editor_default())(_objectSpread(_objectSpread({
-          holderId: configuration.holder || 'codex-editor'
+          holder: configuration.holder || 'codex-editor'
         }, configuration), {}, {
           onReady: function onReady() {
             context.emit('ready');

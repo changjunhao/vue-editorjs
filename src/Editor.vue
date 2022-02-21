@@ -1,6 +1,6 @@
 <template>
   <div id="vue-editorjs">
-    <div :id="config.holderId || holderId "></div>
+    <div :id="config?.holder || holder "></div>
   </div>
 </template>
 
@@ -16,12 +16,11 @@
     name: 'vue-editorjs',
     props: {
       config: Object as PropType<EditorConfig>,
-      holderId: {
+      holder: {
         type: String as PropType<string | HTMLElement>,
         default: () => 'codex-editor',
         required: false
       },
-      holder: String as PropType<string | HTMLElement>,
       autofocus: {
         type: Boolean,
         default: () => false,
@@ -70,7 +69,7 @@
           const { config, ...otherConfig } = props
           const configuration = config || otherConfig
           editor.value = new EditorJS({
-            holderId: configuration.holder || 'codex-editor',
+            holder: configuration.holder || 'codex-editor',
             ...configuration,
             onReady: () => {
               context.emit('ready')
