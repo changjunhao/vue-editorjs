@@ -130,7 +130,7 @@ __webpack_require__.d(__webpack_exports__, {
 
 // EXTERNAL MODULE: external "Vue"
 var external_Vue_ = __webpack_require__(740);
-;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[5].use[0]!./src/Editor.vue?vue&type=template&id=44c7115a&ts=true
+;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[5].use[0]!./src/Editor.vue?vue&type=template&id=393bf444&ts=true
 
 var _hoisted_1 = {
   id: "vue-editorjs"
@@ -138,26 +138,39 @@ var _hoisted_1 = {
 var _hoisted_2 = ["id"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,external_Vue_.openBlock)(), (0,external_Vue_.createElementBlock)("div", _hoisted_1, [(0,external_Vue_.createElementVNode)("div", {
-    id: _ctx.holderId
+    id: _ctx.config.holderId || _ctx.holderId
   }, null, 8
   /* PROPS */
   , _hoisted_2)]);
 }
-;// CONCATENATED MODULE: ./src/Editor.vue?vue&type=template&id=44c7115a&ts=true
+;// CONCATENATED MODULE: ./src/Editor.vue?vue&type=template&id=393bf444&ts=true
 
 // EXTERNAL MODULE: ./node_modules/@editorjs/editorjs/dist/editor.js
 var dist_editor = __webpack_require__(582);
 var editor_default = /*#__PURE__*/__webpack_require__.n(dist_editor);
 ;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[5].use[0]!./src/Editor.vue?vue&type=script&lang=ts
+var _excluded = ["config"];
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 
 
 /* harmony default export */ const Editorvue_type_script_lang_ts = ((0,external_Vue_.defineComponent)({
   name: 'vue-editorjs',
   props: {
+    config: Object,
     holderId: {
       type: String,
       "default": function _default() {
@@ -165,17 +178,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       },
       required: false
     },
+    holder: String,
     autofocus: {
       type: Boolean,
       "default": function _default() {
-        return true;
+        return false;
       },
       required: false
     },
+    initialBlock: String,
     placeholder: {
       type: String,
       "default": function _default() {
         return 'Let`s write an awesome story!';
+      },
+      required: false
+    },
+    sanitizer: Object,
+    hideToolbar: {
+      type: Boolean,
+      "default": function _default() {
+        return false;
       },
       required: false
     },
@@ -188,7 +211,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       type: Object,
       "default": function _default() {},
       required: false
-    }
+    },
+    minHeight: Number,
+    logLevel: String,
+    readOnly: Boolean,
+    i18n: Object,
+    inlineToolbar: Array,
+    tunes: Array
   },
   setup: function setup(props, context) {
     var editor = (0,external_Vue_.ref)(null);
@@ -203,10 +232,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           return console.log(e);
         });
       } else {
-        editor.value = new (editor_default())({
-          holder: props.holderId,
-          autofocus: props.autofocus,
-          placeholder: props.placeholder,
+        var config = props.config,
+            otherConfig = _objectWithoutProperties(props, _excluded);
+
+        var configuration = config || otherConfig;
+        editor.value = new (editor_default())(_objectSpread(_objectSpread({
+          holderId: configuration.holder || 'codex-editor'
+        }, configuration), {}, {
           onReady: function onReady() {
             context.emit('ready');
           },
@@ -239,10 +271,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             }
 
             return onChange;
-          }(),
-          data: props.data,
-          tools: props.tools
-        });
+          }()
+        }));
       }
     };
 

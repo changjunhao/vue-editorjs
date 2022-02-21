@@ -1,6 +1,6 @@
 {
   "name": "@junhao/vue-editorjs",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Editor js wrapping component",
   "keywords": [
     "vue editor",

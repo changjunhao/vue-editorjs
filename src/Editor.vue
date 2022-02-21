@@ -1,41 +1,62 @@
 <template>
   <div id="vue-editorjs">
-    <div :id="holderId"></div>
+    <div :id="config.holderId || holderId "></div>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, onMounted, onBeforeUnmount, ref, Ref } from 'vue'
-  import EditorJS, { OutputData } from '@editorjs/editorjs'
+  import { defineComponent, onMounted, onBeforeUnmount, PropType, ref, Ref } from 'vue'
+  import EditorJS, { LogLevels, OutputData } from '@editorjs/editorjs'
+  import { SanitizerConfig } from "@editorjs/editorjs/types/configs/sanitizer-config";
+  import { ToolConstructable, ToolSettings } from "@editorjs/editorjs/types/tools";
+  import { I18nConfig } from "@editorjs/editorjs/types/configs/i18n-config";
+  import { EditorConfig } from "@editorjs/editorjs/types/configs/editor-config";
 
   export default defineComponent({
     name: 'vue-editorjs',
     props: {
+      config: Object as PropType<EditorConfig>,
       holderId: {
-        type: String,
+        type: String as PropType<string | HTMLElement>,
         default: () => 'codex-editor',
         required: false
       },
+      holder: String as PropType<string | HTMLElement>,
       autofocus: {
         type: Boolean,
-        default: () => true,
+        default: () => false,
         required: false
       },
+      initialBlock: String,
       placeholder: {
         type: String,
         default: () => 'Let`s write an awesome story!',
         required: false
       },
+      sanitizer: Object as PropType<SanitizerConfig>,
+      hideToolbar: {
+        type: Boolean,
+        default: () => false,
+        required: false
+      },
       data: {
-        type: Object,
+        type: Object as PropType<OutputData>,
         default: () => {},
         required: false
       },
       tools: {
-        type: Object,
+        type: Object as PropType<{
+          [toolName: string]: ToolConstructable | ToolSettings;
+        }>,
         default: () => {},
         required: false
-      }
+      },
+      minHeight: Number,
+      logLevel: String as PropType<LogLevels>,
+      readOnly: Boolean,
+      i18n: Object as PropType<I18nConfig>,
+      inlineToolbar: Array as PropType<string[]>,
+      tunes: Array as PropType<string[]>,
     },
     setup(props, context) {
       const editor: Ref<EditorJS | null> = ref(null)
@@ -43,13 +64,14 @@
         if (editor.value) {
           editor.value.isReady
               .then(() => {
-                editor.value?.render(props.data as OutputData)
+                editor.value?.render(props.data)
               }).catch(e => console.log(e));
         } else {
+          const { config, ...otherConfig } = props
+          const configuration = config || otherConfig
           editor.value = new EditorJS({
-            holder: props.holderId,
-            autofocus: props.autofocus,
-            placeholder: props.placeholder,
+            holderId: configuration.holder || 'codex-editor',
+            ...configuration,
             onReady: () => {
               context.emit('ready')
             },
@@ -57,8 +79,6 @@
               const response = await editor.value?.save()
               context.emit('change', response)
             },
-            data: props.data as OutputData,
-            tools: props.tools
           })
         }
       }

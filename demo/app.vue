@@ -1,16 +1,23 @@
 <template>
   <vue-editorjs
       ref="editor"
-      :data="initData"
-      :tools="tools"
+      :config="config"
       @save="onSave"
       @ready="onReady"
       @change="onChange"
   />
+<!--  <vue-editorjs-->
+<!--      ref="editor"-->
+<!--      :data="initData"-->
+<!--      :tools="tools"-->
+<!--      @save="onSave"-->
+<!--      @ready="onReady"-->
+<!--      @change="onChange"-->
+<!--  />-->
 </template>
 
 <script lang="ts">
-  // import { Editor } from '../dist/vue-editorjs.min.js'
+  import { Editor } from '../dist/vue-editorjs.min.js'
   import { defineComponent, readonly, ref } from 'vue'
   import Header from '@editorjs/header'
   import List from '@editorjs/list'
@@ -29,9 +36,9 @@
   import checklist from '@editorjs/checklist'
 
   export default defineComponent({
-    // components: {
-    //   [Editor.name]: Editor
-    // },
+    components: {
+      [Editor.name]: Editor
+    },
     setup() {
       const initData = readonly(JSON.parse('{"time":1558356864490,"blocks":[{"type":"paragraph","data":{"text":"First text"}},{"type":"paragraph","data":{"text":"Second text"}}],"version":"2.13"}'))
 
@@ -88,6 +95,11 @@
 
       const saveData = ref({})
 
+      const config = readonly({
+        data: initData,
+        tools: tools,
+      })
+
       const onReady = () => {
         console.log('editor are ready')
       }
@@ -100,6 +112,7 @@
       return {
         initData,
         tools,
+        config,
         onSave,
         onReady,
         onChange

@@ -42,8 +42,10 @@ export default {
 ```
 
 ```Vue
+// Support all configuration items of editorjs, which can be passed individually or converged with config props, config has the highest priority.
   <vue-editorjs
     ref="editor"
+    :config="config"
     :data="initData"
     :tools="tools"
     @save="onSave"
