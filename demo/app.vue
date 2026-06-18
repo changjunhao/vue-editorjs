@@ -1,127 +1,134 @@
 <template>
-<!--  <vue-editorjs-->
-<!--      ref="editor"-->
-<!--      :config="config"-->
-<!--      @save="onSave"-->
-<!--      @ready="onReady"-->
-<!--      @change="onChange"-->
-<!--  />-->
-  <vue-editorjs
-      ref="editor"
-      :data="initData"
-      :tools="tools"
-      @save="onSave"
+  <div class="demo">
+    <h1>Vue EditorJS Demo</h1>
+
+    <!-- 推荐用法：通过 config 传入完整配置 -->
+    <vue-editorjs
+      ref="editorRef"
+      :config="editorConfig"
       @ready="onReady"
       @change="onChange"
-  />
+      @save="onSave"
+    />
+
+    <button @click="handleSave">Save</button>
+    <pre v-if="savedData">{{ JSON.stringify(savedData, null, 2) }}</pre>
+  </div>
 </template>
 
-<script lang="ts">
-  // import { Editor } from '../dist/vue-editorjs.min.js'
-  import { defineComponent, readonly, ref } from 'vue'
-  import Header from '@editorjs/header'
-  import List from '@editorjs/list'
-  import ImageTool from '@editorjs/image'
-  import inlineCode from '@editorjs/inline-code'
-  import embed from '@editorjs/embed'
-  import quote from '@editorjs/quote'
-  import marker from '@editorjs/marker'
-  import code from '@editorjs/code'
-  import link from '@editorjs/link'
-  import delimiter from '@editorjs/delimiter'
-  import raw from '@editorjs/raw'
-  import table from '@editorjs/table'
-  import warning from '@editorjs/warning'
-  import paragraph from '@editorjs/paragraph'
-  import checklist from '@editorjs/checklist'
+<script setup lang="ts">
+import { ref, readonly } from 'vue'
+import type { EditorConfig, OutputData } from '@editorjs/editorjs'
+import type { Editor } from '../src'
 
-  export default defineComponent({
-    // components: {
-    //   [Editor.name]: Editor
-    // },
-    setup() {
-      const initData = readonly(JSON.parse('{"time":1558356864490,"blocks":[{"type":"paragraph","data":{"text":"First text"}},{"type":"paragraph","data":{"text":"Second text"}}],"version":"2.13"}'))
+// --- Editor.js 工具（全部由外部配置） ---
+import Header from '@editorjs/header'
+import List from '@editorjs/list'
+import ImageTool from '@editorjs/image'
+import InlineCode from '@editorjs/inline-code'
+import Embed from '@editorjs/embed'
+import Quote from '@editorjs/quote'
+import Marker from '@editorjs/marker'
+import Code from '@editorjs/code'
+import Link from '@editorjs/link'
+import Delimiter from '@editorjs/delimiter'
+import Raw from '@editorjs/raw'
+import Table from '@editorjs/table'
+import Warning from '@editorjs/warning'
+import Paragraph from '@editorjs/paragraph'
+import Checklist from '@editorjs/checklist'
 
-      const tools = readonly({
-        header: {
-          class: Header,
-          config: {
-            placeholder: 'Enter a header'
-          }
-        },
-        list: {
-          class: List,
-        },
-        code: {
-          class: code,
-        },
-        inlineCode: {
-          class: inlineCode,
-        },
-        embed: {
-          class: embed,
-        },
-        link: {
-          class: link,
-        },
-        marker: {
-          class: marker,
-        },
-        table: {
-          class: table,
-        },
-        raw: {
-          class: raw,
-        },
-        delimiter: {
-          class: delimiter,
-        },
-        quote: {
-          class: quote,
-        },
-        image: {
-          class: ImageTool,
-        },
-        warning: {
-          class: warning,
-        },
-        paragraph: {
-          class: paragraph,
-        },
-        checklist: {
-          class: checklist,
-        },
-      })
+// --- 初始数据 ---
+const initData: OutputData = {
+  time: 1558356864490,
+  blocks: [
+    { type: 'paragraph', data: { text: 'First text' } },
+    { type: 'paragraph', data: { text: 'Second text' } },
+  ],
+  version: '2.13',
+}
 
-      const saveData = ref({})
+// --- 完整 EditorJS 配置（推荐方式） ---
+const editorConfig = readonly<EditorConfig>({
+  data: initData,
+  tools: {
+    header: {
+      class: Header,
+      config: { placeholder: 'Enter a header' },
+    },
+    list: List,
+    code: Code,
+    inlineCode: InlineCode,
+    embed: Embed,
+    link: Link,
+    marker: Marker,
+    table: Table,
+    raw: Raw,
+    delimiter: Delimiter,
+    quote: Quote,
+    image: {
+      class: ImageTool,
+      config: {
+        uploader: {
+          uploadByFile(file: File): Promise<{ success: number; file: { url: string } }> {
+            return new Promise((resolve) => {
+              const reader = new FileReader()
+              reader.onload = () => {
+                resolve({
+                  success: 1,
+                  file: { url: reader.result as string },
+                })
+              }
+              reader.readAsDataURL(file)
+            })
+          },
+        },
+      },
+    },
+    warning: Warning,
+    paragraph: Paragraph,
+    checklist: Checklist,
+  },
+})
 
-      const config = readonly({
-        data: initData,
-        tools: tools,
-      })
+// --- 通过 template ref 调用暴露的方法 ---
+const editorRef = ref<InstanceType<typeof Editor>>()
+const savedData = ref<OutputData | null>(null)
 
-      const onReady = () => {
-        console.log('editor are ready')
-      }
-      const onChange = (response) => {
-        saveData.value = response
-      }
-      const onSave = (response) => {
-        saveData.value = response
-      }
-      return {
-        initData,
-        tools,
-        config,
-        onSave,
-        onReady,
-        onChange
-      }
-    }
-  })
+const onReady = () => {
+  console.log('Editor is ready')
+}
 
+const onChange = (data: OutputData) => {
+  console.log('Content changed', data)
+}
+
+const onSave = (data: OutputData) => {
+  savedData.value = data
+}
+
+const handleSave = () => {
+  editorRef.value?.save()
+}
 </script>
 
 <style scoped>
+.demo {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
 
+button {
+  padding: 8px 16px;
+  margin: 12px 0;
+  cursor: pointer;
+}
+
+pre {
+  background: #f4f4f4;
+  padding: 12px;
+  border-radius: 4px;
+  overflow-x: auto;
+}
 </style>

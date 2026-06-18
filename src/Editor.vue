@@ -1,105 +1,83 @@
 <template>
-  <div id="vue-editorjs">
-    <div :id="config?.holder || holder "></div>
+  <div class="vue-editorjs">
+    <div :id="holderId"></div>
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, onMounted, onBeforeUnmount, PropType, ref, Ref } from 'vue'
-  import EditorJS, { LogLevels, OutputData } from '@editorjs/editorjs'
-  import { SanitizerConfig } from "@editorjs/editorjs/types/configs/sanitizer-config";
-  import { ToolConstructable, ToolSettings } from "@editorjs/editorjs/types/tools";
-  import { I18nConfig } from "@editorjs/editorjs/types/configs/i18n-config";
-  import { EditorConfig } from "@editorjs/editorjs/types/configs/editor-config";
+<script setup lang="ts">
+import { onMounted, onBeforeUnmount } from 'vue'
+import EditorJS from '@editorjs/editorjs'
+import type { EditorConfig } from '@editorjs/editorjs/types/configs/editor-config'
+import type { OutputData } from '@editorjs/editorjs'
+import type { ToolConstructable, ToolSettings } from '@editorjs/editorjs/types/tools'
 
-  export default defineComponent({
-    name: 'vue-editorjs',
-    props: {
-      config: Object as PropType<EditorConfig>,
-      holder: {
-        type: String as PropType<string | HTMLElement>,
-        default: () => 'codex-editor',
-        required: false
-      },
-      autofocus: {
-        type: Boolean,
-        default: () => false,
-        required: false
-      },
-      initialBlock: String,
-      placeholder: {
-        type: String,
-        default: () => 'Let`s write an awesome story!',
-        required: false
-      },
-      sanitizer: Object as PropType<SanitizerConfig>,
-      hideToolbar: {
-        type: Boolean,
-        default: () => false,
-        required: false
-      },
-      data: {
-        type: Object as PropType<OutputData>,
-        default: () => {},
-        required: false
-      },
-      tools: {
-        type: Object as PropType<{
-          [toolName: string]: ToolConstructable | ToolSettings;
-        }>,
-        default: () => {},
-        required: false
-      },
-      minHeight: Number,
-      logLevel: String as PropType<LogLevels>,
-      readOnly: Boolean,
-      i18n: Object as PropType<I18nConfig>,
-      inlineToolbar: Array as PropType<string[]>,
-      tunes: Array as PropType<string[]>,
+defineOptions({ name: 'vue-editorjs' })
+
+const props = defineProps<{
+  /** 完整的 EditorJS 配置（推荐方式） */
+  config?: EditorConfig
+  /** 初始数据（快捷用法） */
+  data?: OutputData
+  /** 编辑器工具（快捷用法） */
+  tools?: Record<string, ToolConstructable | ToolSettings>
+  /** 占位符（快捷用法） */
+  placeholder?: string | false
+  /** 只读模式（快捷用法） */
+  readOnly?: boolean
+  /** 最小高度（快捷用法） */
+  minHeight?: number
+}>()
+
+const emit = defineEmits<{
+  ready: []
+  change: [data: OutputData]
+  save: [data: OutputData]
+}>()
+
+let editor: EditorJS | null = null
+const holderId = `editorjs-${Math.random().toString(36).slice(2, 9)}`
+
+const getEditorConfig = (): EditorConfig => {
+  if (props.config) {
+    return { ...props.config, holder: props.config.holder || holderId }
+  }
+  return {
+    holder: holderId,
+    ...(props.data !== undefined && { data: props.data }),
+    ...(props.tools !== undefined && { tools: props.tools }),
+    ...(props.placeholder !== undefined && { placeholder: props.placeholder }),
+    ...(props.readOnly !== undefined && { readOnly: props.readOnly }),
+    ...(props.minHeight !== undefined && { minHeight: props.minHeight }),
+  }
+}
+
+const initEditor = () => {
+  editor = new EditorJS({
+    ...getEditorConfig(),
+    onReady: () => emit('ready'),
+    onChange: async () => {
+      const data = await editor?.save()
+      if (data) emit('change', data)
     },
-    setup(props, context) {
-      const editor: Ref<EditorJS | null> = ref(null)
-      const initEditor = () => {
-        if (editor.value) {
-          editor.value.isReady
-              .then(() => {
-                editor.value?.render(props.data)
-              }).catch(e => console.log(e));
-        } else {
-          const { config, ...otherConfig } = props
-          const configuration = config || otherConfig
-          editor.value = new EditorJS({
-            holder: configuration.holder || 'codex-editor',
-            ...configuration,
-            onReady: () => {
-              context.emit('ready')
-            },
-            onChange: async () => {
-              const response = await editor.value?.save()
-              context.emit('change', response)
-            },
-          })
-        }
-      }
-
-      onMounted(() => {
-        initEditor()
-      })
-
-      onBeforeUnmount(() => {
-        if (editor.value) {
-          editor.value.destroy();
-        }
-      })
-
-      const save = async () => {
-        const response = await editor.value?.save()
-        context.emit('save', response)
-      }
-    }
   })
+}
+
+onMounted(() => initEditor())
+
+onBeforeUnmount(() => {
+  editor?.destroy()
+  editor = null
+})
+
+const save = async () => {
+  const data = await editor?.save()
+  if (data) emit('save', data)
+  return data
+}
+
+const render = (data: OutputData) => {
+  editor?.isReady.then(() => editor?.render(data))
+}
+
+defineExpose({ save, render })
 </script>
-
-<style scoped>
-
-</style>

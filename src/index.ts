@@ -1,16 +1,16 @@
 /**
  * Vue-editorjs
- * Editor js wrapping component
- *
- * @version 1.0.0
+ * Editor.js wrapping component for Vue 3
  */
-import { App } from 'vue'
+import type { App, Plugin } from 'vue'
 import EditorComponent from './Editor.vue'
 
 export const Editor = EditorComponent
-export default {
-  Editor: EditorComponent,
-  install: (app: App) => {
-    app.component(EditorComponent.name, EditorComponent)
-  }
+
+const plugin: Plugin = {
+  install(app: App) {
+    app.component('VueEditorjs', EditorComponent)
+  },
 }
+
+export default plugin
